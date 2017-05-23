@@ -59,6 +59,10 @@ class Boss:
         self.dp = dp
         self.sp = sp
 
+    def set_position(self, alteration):
+        self.position[0] += alteration[0]
+        self.position[1] += alteration[1]
+
     def get_boss_position(self):
         return self.position
 
@@ -78,6 +82,10 @@ class Skeleton:
         self.dp = dp
         self.sp = sp
         self.has_key = has_key
+
+    def set_position(self, alteration):
+        self.position[0] += alteration[0]
+        self.position[1] += alteration[1]
 
     def get_skeleton_position(self):
         return self.position

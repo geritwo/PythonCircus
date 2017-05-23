@@ -21,11 +21,12 @@ class Game:
 
     def __init__(self):
         self.model = model.AreaMap()
+        self.enemies = {}
 
         # *** [ Movement variables, rulesets ] ***
-        # TODO: Store them better.
         self.hero_heading = 'Down'
         self.movement_alterations = {'Up':[0, -1], 'Down':[0, 1], 'Left':[-1, 0], 'Right':[1, 0]}
+        self.enemy_movement_keys = ['Up', 'Down', 'Left', 'Right']
         self.current_level = 1
         self.status_message = '-'
 
@@ -51,7 +52,6 @@ class Game:
 
 
     def generate_enemies(self):
-        self.enemies = {}
 
         number_of_enemies = random.randrange(3, 6)
         enemy_start_positions = []
@@ -60,7 +60,7 @@ class Game:
             position_index = random.randrange(len(self.valid_character_positions)-3) # Pick random pos from valid (w safety buffer - avoid out of range)
             position = self.valid_character_positions[position_index] # Set position there
             if position in enemy_start_positions or position == [0, 0]: # Check if not taken,
-                 position = self.valid_character_positions[position_index + 2] # if so, pick position two indexes further
+                position = self.valid_character_positions[position_index + 2] # if so, pick position two indexes further
             enemy_start_positions.append(position) # add position to list
 
             hp = 2 * self.current_level * random.randrange(1, 7)
@@ -128,7 +128,15 @@ class Game:
             self.status_message = '-'
         else:
             self.status_message = 'BANG!'
+        self.move_enemies()
         self.game_phase_display()
+
+    # WORK IN PROGRESS HERE
+    def move_enemies(self):
+        for i in range(0, len(self.enemies)+1):
+            direction = self.enemy_movement_keys[random.randint(0, 3)]
+            if self.is_way_free(direction) == True:
+                self.enemies[i].set_position(self.movement_alterations[direction])
 
     def is_way_free(self, direction):
         target_position = [0, 0] # NOTE: x, y = column, row
