@@ -1,10 +1,10 @@
 '''
 *** TkWanderer Game ***
 Version 1.0
-by Gergo Vamosi, alias GergoV
-https://github.com/GergoV
+by Gergo Vamosi, alias geritwo
+https://github.com/geritwo
 
-Milestone 3.: Map rendered, character moves, enemies generated and appear + status display 0.1
+Milestone 4.: Map rendered, character moves, enemies generated and move + status display 0.1
 
 Green Fox Academy, Zerda class, Lasers group, 2016.
 '''
@@ -95,9 +95,9 @@ class Game:
         self.view.display_area(self.area_dimensions, self.area_floorplan)
         self.view.display_hero(self.hero.get_hero_position(), self.hero_heading)
 
-        self.view.display_enemies('Boss', self.enemies[0].get_boss_position())
+        self.view.display_enemies('Boss', self.enemies[0].get_position())
         for i in range(1, len(self.enemies)):
-            self.view.display_enemies('Skeleton', self.enemies[i].get_skeleton_position())
+            self.view.display_enemies('Skeleton', self.enemies[i].get_position())
 
         self.view.dislay_stats(self.hero.get_hero_stats(), [0, 0, 0], self.status_message)
 
@@ -133,10 +133,12 @@ class Game:
 
     # WORK IN PROGRESS HERE
     def move_enemies(self):
-        for i in range(0, len(self.enemies)+1):
+        for i in range(0, len(self.enemies)):
             direction = self.enemy_movement_keys[random.randint(0, 3)]
-            if self.is_way_free(direction) == True:
+            if self.is_enemys_way_free(self.enemies[i], direction) == True:
                 self.enemies[i].set_position(self.movement_alterations[direction])
+            else:
+                break
 
     def is_way_free(self, direction):
         target_position = [0, 0] # NOTE: x, y = column, row
@@ -155,7 +157,20 @@ class Game:
             else:
                 return False
 
+    def is_enemys_way_free(self, enemy, direction):
+        target_position = [0, 0] # NOTE: x, y = column, row
+        map_max_x = range(self.area_dimensions[1])
+        map_max_y = range(self.area_dimensions[0])
 
+        target_position[0] = self.movement_alterations[direction][0] + enemy.get_position()[0]
+        target_position[1] = self.movement_alterations[direction][1] + enemy.get_position()[1]
+
+        if target_position[0] in map_max_x and target_position[1] in map_max_y:
+            target_tile_type = int(self.area_floorplan[target_position[1]][target_position[0]])
+            if target_tile_type < 1:
+                return True
+            else:
+                return False
 
 # *** [ LAUNCH GAME ] ***
 main = Game()

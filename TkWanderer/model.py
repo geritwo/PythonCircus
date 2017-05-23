@@ -63,7 +63,7 @@ class Boss:
         self.position[0] += alteration[0]
         self.position[1] += alteration[1]
 
-    def get_boss_position(self):
+    def get_position(self):
         return self.position
 
     def get_enemy_type(self):
@@ -87,7 +87,7 @@ class Skeleton:
         self.position[0] += alteration[0]
         self.position[1] += alteration[1]
 
-    def get_skeleton_position(self):
+    def get_position(self):
         return self.position
 
     def get_enemy_type(self):
